@@ -1,0 +1,9 @@
+wheel
+setuptools
+
+black
+pytest
+flake8
+pytest-cov
+mypy
+moto
