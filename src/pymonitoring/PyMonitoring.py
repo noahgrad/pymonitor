@@ -8,7 +8,7 @@ logger = logging.getLogger()
 def monitor():
     raise NotImplementedException()
 
-class PyMonitoring(ABC):
+class PyMonitoring:
     """
     Class for auxiliary method for monitor
     """

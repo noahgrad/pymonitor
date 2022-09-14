@@ -17,6 +17,33 @@ def parse_options():
     return options
 
 
+def monitor(dir: str, end_ts: int, filename:str="monitor.py", methodname:str="monitor"):
+    """
+    Get all files name filename in dir
+    for each file:
+        execute the method methodname with the end_ts
+    :param dir: the directory to scan from
+    :param end_ts: the time until it we can monitor
+    :param filename: default monitor.py the file name to search in dir
+    :param methodname: the methodname name to search in each file. default is monitor
+    :return:
+    """
+    logging.info(
+        f"Going to monitor all {filename} files in dir {dir} end ts is {datetime.fromtimestamp(end_ts)}")
+    for pyfile in pathlib.Path(dir).glob(f'**/{filename}'):
+        try:
+            logging.info(f"Going to monitor {pyfile}")
+            spec = importlib.util.spec_from_file_location(f"{__name__}.imported_{pyfile.stem}", pyfile)
+            module = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(module)
+            monitor_method = getattr(module, methodname)
+            res = monitor_method(end_ts)
+            logging.info(f"monitor ends with status {res}")
+        except Exception as e:
+            message = f"Couldn't monitor {pyfile} exception is {e}"
+            logging.error(message)
+            # you can add slack or email notification
+
 def main(options):
     """
     Get all files name options.filename in options.dir
@@ -26,19 +53,7 @@ def main(options):
     :return:
     """
     logging.info(f"Going to monitor all {options.filename} files in dir {options.dir} end ts is {datetime.fromtimestamp(options.end_ts)}")
-    for pyfile in pathlib.Path(options.dir).glob(f'**/{options.filename}'):
-        try:
-            logging.info(f"Going to monitor {pyfile}")
-            spec = importlib.util.spec_from_file_location(f"{__name__}.imported_{pyfile.stem}" , pyfile)
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-            monitor_method = getattr(module, options.methodname)
-            res = monitor_method(options.end_ts)
-            logging.info(f"monitor ends with status {res}")
-        except Exception as e:
-            message = f"Couldn't monitor {pyfile} exception is {e}"
-            logging.error(message)
-            # you can add slack or email notification
+    monitor(options.dir, options.end_ts, options.filename, options.methodname)
 
 
 if __name__ == '__main__':

@@ -1,4 +1,4 @@
-from PyMonitoring import PyMonitoring, monitor
+from pymonitoring.PyMonitoring import PyMonitoring, monitor
 import logging
 from datetime import datetime, timedelta
 

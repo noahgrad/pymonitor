@@ -1,5 +1,9 @@
 
 # pymonitor
+
+more info including examples can be found here <br>
+[https://github.com/noahgrad/pymonitor/](https://github.com/noahgrad/pymonitor/)
+
 ## Why?
 Lets say you have a lot of etls that runs in different platforms (airflow, kubernetes etc)  and writes data to different places  (mysql, snowflake, s3 etc) so how do you monitor them? how do you check that each of etls end up correctly and the data reached its destination?
 pymonitor come to help discover that the data didn't reach its destination ASAP.
@@ -13,9 +17,13 @@ By the end of running the script we will get a covergae of monitor for all the e
 ## Usage example
 python src/pymonitoring/pymonitor.py --dir etls --end_ts 1663064624 --filename "Example*.py" <br>
 Will try to find all the Example*.py file name in directory etls and run their monitor method. <br>
-**pip package pymonitor**
+or  <br>
+**pip intsall pymonitor-foretls** <br>
+from pymonitoring.pymonitor import monitor
+monitor("examples", 1663064624,"Example*.py")
 
-## The pymonitor.py script
+
+## The pymonitor.py script or monitor method 
 Need to get: <br>
 **end_ts**  - the timestamp untill it we want to monitor. <br>
 **dir**         - the directory to run on <br>
